@@ -24,44 +24,6 @@ module "resource_group" {
 }
 
 ##-----------------------------------------------------------------------------
-## Virtual Network module call.
-##-----------------------------------------------------------------------------
-module "vnet" {
-  source              = "clouddrove/vnet/azure"
-  version             = "1.0.4"
-  name                = local.name
-  environment         = local.environment
-  resource_group_name = module.resource_group.resource_group_name
-  location            = module.resource_group.resource_group_location
-  address_spaces      = ["10.0.0.0/16"]
-}
-
-##-----------------------------------------------------------------------------
-## Subnet module call.
-##-----------------------------------------------------------------------------
-module "subnet" {
-  source               = "clouddrove/subnet/azure"
-  version              = "1.1.0"
-  name                 = local.name
-  environment          = local.environment
-  resource_group_name  = module.resource_group.resource_group_name
-  location             = module.resource_group.resource_group_location
-  virtual_network_name = module.vnet.vnet_name
-  #subnet
-  subnet_names      = ["default"]
-  subnet_prefixes   = ["10.0.1.0/24"]
-  service_endpoints = ["Microsoft.Storage"]
-  delegation = {
-    flexibleServers_delegation = [
-      {
-        name    = "Microsoft.DBforPostgreSQL/flexibleServers"
-        actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
-      }
-    ]
-  }
-}
-
-##-----------------------------------------------------------------------------
 ## Log Analytics module call.
 ##-----------------------------------------------------------------------------
 module "log-analytics" {
@@ -87,14 +49,12 @@ module "vault" {
   source  = "clouddrove/key-vault/azure"
   version = "1.1.0"
 
-  name                        = "pgsqlvault498"
+  name                        = "pgsqlvault98"
   environment                 = "test"
   label_order                 = ["name", "environment", ]
   resource_group_name         = module.resource_group.resource_group_name
   location                    = module.resource_group.resource_group_location
   admin_objects_ids           = [data.azurerm_client_config.current_client_config.object_id]
-  virtual_network_id          = module.vnet.vnet_id
-  subnet_id                   = module.subnet.default_subnet_id[0]
   enable_rbac_authorization   = true
   enabled_for_disk_encryption = false
   #private endpoint
@@ -103,7 +63,7 @@ module "vault" {
 }
 
 module "flexible-postgresql" {
-  depends_on          = [module.resource_group, module.vnet]
+  depends_on          = [module.resource_group]
   source              = "../.."
   name                = local.name
   environment         = local.environment
@@ -125,11 +85,11 @@ module "flexible-postgresql" {
   #Entra_id Group name or user who can log into database.
   principal_name = "Database_Admins"
 
-  #**************************private server*********************************
-  #(Resources to recreate when changing private to public cluster or vise-versa )
-  virtual_network_id  = module.vnet.vnet_id
-  private_dns         = true
-  delegated_subnet_id = module.subnet.default_subnet_id[0]
+  #**************************Public server*********************************
+  allowed_cidrs = {
+    "allowed_all_ip"      = "0.0.0.0/0"
+    "allowed_specific_ip" = "11.32.16.78/32"
+  }
 
   #**************************Logging*****************************************
   # By default diagnostic setting is enabled and logs are set AuditLogs and All_Metric. To disable logging set enable_diagnostic to false.

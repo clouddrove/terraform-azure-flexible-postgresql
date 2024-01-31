@@ -5,40 +5,188 @@
 #
 
 # Name of this project
-name : Terraform Module Template
+name: Terraform AZURE flexible-postgresql
 
 # License of this project
 license: "APACHE"
 
 # Canonical GitHub repo
-github_repo: clouddrove/terraform-module-template
+github_repo: clouddrove/terraform-azure-flexible-postgresql
 
 # Badges to display
 badges:
   - name: "Latest Release"
-    image: "https://img.shields.io/github/release/clouddrove/terraform-module-template.svg"
-    url: "https://github.com/clouddrove/terraform-module-template/releases/latest"
+    image: "https://img.shields.io/github/release/clouddrove/terraform-azure-flexible-postgresql.svg"
+    url: "https://github.com/clouddrove/terraform-azure-flexible-postgresql/releases/latest"
   - name: "tfsec"
-    image: "https://github.com/clouddrove/terraform-module-template/actions/workflows/tfsec.yml/badge.svg"
-    url: ""
+    image: "https://github.com/clouddrove/terraform-azure-flexible-postgresql/actions/workflows/tfsec.yml/badge.svg"
+    url: "https://github.com/clouddrove/terraform-azure-flexible-postgresql/actions/workflows/tfsec.yml"
   - name: "Licence"
     image: "https://img.shields.io/badge/License-APACHE-blue.svg"
     url: "LICENSE.md"
 
-prerequesties:
-  - name: Terraform 1.4.6
-    url: https://learn.hashicorp.com/terraform/getting-started/install.html
-    
 #  description of this project
 description: |-
-  Terraform module template to create new modules using this as baseline
+  Terraform module to create VIRTUAL-NETWORK resource on AZURE.
+
 # extra content
 include:
   - "terraform.md"
 
 # How to use this project
-# How to use this project
+# yamllint disable rule:line-length
 usage: |-
-  Here are some examples of how you can use this module in your inventory structure:
-  ```hcl
-    ```
+  ### Basic Example
+   ```hcl
+     module "flexible-postgresql" {
+      source              = "../.."
+      name                = "app"
+      resource_group_name = "test"
+      location            = "Canada Central"
+
+      #**************************server configuration***************************
+      postgresql_version = "16"
+      admin_username     = "postgresqlusername"
+      admin_password     = "ba5yatgfgfhdsv6A3ns2lu4gqzzc" # Null value will generate random password and added to tfstate file.
+      tier               = "Burstable"
+      size               = "B1ms"
+      database_names     = ["maindb"]
+      #high_availability is applicable if tier are GeneralPurpose and MemoryOptimized.
+      high_availability = {
+        mode                      = "ZoneRedundant"
+        standby_availability_zone = 2
+      }
+      #Entra_id Group name or user who can log into database.
+      principal_name = "Database_Admins"
+
+      #**************************private server*********************************
+      #(Resources to recreate when changing private to public cluster or vise-versa )
+      virtual_network_id  = ""
+      private_dns         = false
+      delegated_subnet_id = null
+
+      #**************************Logging*****************************************
+      # By default diagnostic setting is enabled and logs are set AuditLogs and All_Metric. To disable logging set enable_diagnostic to false.
+      enable_diagnostic          = false
+      log_analytics_workspace_id = "/subscription/***************"
+
+      #**************************Encryption**************************************
+      # Database encryption with costumer manage keys
+      cmk_encryption_enabled = false
+      key_vault_id           = "/subscription/***************"
+      admin_objects_ids      = [data.azurerm_client_config.current_client_config.object_id]
+    }
+
+   ```
+  ### Complete Example
+   ```hcl
+     module "flexible-postgresql" {
+      depends_on          = [module.resource_group, module.vnet]
+      source              = "../.."
+      name                = local.name
+      environment         = local.environment
+      resource_group_name = module.resource_group.resource_group_name
+      location            = module.resource_group.resource_group_location
+
+      #**************************server configuration***************************
+      postgresql_version = "16"
+      admin_username     = "postgresqlusername"
+      admin_password     = "ba5yatgfgfhdsv6A3ns2lu4gqzzc" # Null value will generate random password and added to tfstate file.
+      tier               = "Burstable"
+      size               = "B1ms"
+      database_names     = ["maindb"]
+      #high_availability is applicable if tier are GeneralPurpose and MemoryOptimized.
+      high_availability = {
+        mode                      = "ZoneRedundant"
+        standby_availability_zone = 2
+      }
+      #Entra_id Group name or user who can log into database.
+      principal_name = "Database_Admins"
+
+      #**************************private server*********************************
+      #(Resources to recreate when changing private to public cluster or vise-versa )
+      virtual_network_id  = module.vnet.vnet_id
+      private_dns         = true
+      delegated_subnet_id = module.subnet.default_subnet_id[0]
+
+      #**************************Logging*****************************************
+      # By default diagnostic setting is enabled and logs are set AuditLogs and All_Metric. To disable logging set enable_diagnostic to false.
+      log_analytics_workspace_id = module.log-analytics.workspace_id
+
+      #**************************Encryption**************************************
+      # Database encryption with costumer manage keys
+      cmk_encryption_enabled = true
+      key_vault_id           = module.vault.id
+      admin_objects_ids      = [data.azurerm_client_config.current_client_config.object_id]
+    }
+
+   ```
+   ### flexible-pgsql-public Example
+   ```hcl
+     module "flexible-postgresql" {
+      depends_on          = [module.resource_group]
+      source              = "../.."
+      name                = local.name
+      environment         = local.environment
+      resource_group_name = module.resource_group.resource_group_name
+      location            = module.resource_group.resource_group_location
+
+      #**************************server configuration***************************
+      postgresql_version = "16"
+      admin_username     = "postgresqlusername"
+      admin_password     = "ba5yatgfgfhdsv6A3ns2lu4gqzzc" # Null value will generate random password and added to tfstate file.
+      tier               = "Burstable"
+      size               = "B1ms"
+      database_names     = ["maindb"]
+      #high_availability is applicable if tier are GeneralPurpose and MemoryOptimized.
+      high_availability = {
+        mode                      = "ZoneRedundant"
+        standby_availability_zone = 2
+      }
+      #Entra_id Group name or user who can log into database.
+      principal_name = "Database_Admins"
+
+      #**************************Public server*********************************
+      allowed_cidrs = {
+        "allowed_all_ip"      = "0.0.0.0/0"
+        "allowed_specific_ip" = "11.32.16.78/32"
+      }
+
+      #**************************Logging*****************************************
+      # By default diagnostic setting is enabled and logs are set AuditLogs and All_Metric. To disable logging set enable_diagnostic to false.
+      log_analytics_workspace_id = module.log-analytics.workspace_id
+
+      #**************************Encryption**************************************
+      # Database encryption with costumer manage keys
+      cmk_encryption_enabled = true
+      key_vault_id           = module.vault.id
+      admin_objects_ids      = [data.azurerm_client_config.current_client_config.object_id]
+    }
+   ```
+   ### pgsql-server-replication Example
+   ```hcl
+     module "flexible-postgresql" {
+      depends_on                     = [module.resource_group, module.vnet, data.azurerm_resource_group.main]
+      source                         = "../.."
+      name                           = "app"
+      environment                    = "test2"
+      label_order                    = ["name", "environment"]
+      main_rg_name                   = data.azurerm_resource_group.main.name
+      resource_group_name            = module.resource_group.resource_group_name
+      location                       = module.resource_group.resource_group_location
+      virtual_network_id             = module.vnet.vnet_id[0]
+      delegated_subnet_id            = module.subnet.default_subnet_id[0]
+      postgresql_version             = "12"
+      zone                           = "1"
+      admin_username                 = "postgresqlusern"
+      admin_password                 = "ba5yatgfgfhdsvvc6A3ns2lu4gqzzc"
+      tier                           = "Burstable"
+      size                           = "B1ms"
+      database_names                 = ["maindb"]
+      charset                        = "utf8"
+      collation                      = "en_US.utf8"
+      existing_private_dns_zone      = true
+      existing_private_dns_zone_id   = data.azurerm_private_dns_zone.main.id
+      existing_private_dns_zone_name = data.azurerm_private_dns_zone.main.name
+    }
+   ```
