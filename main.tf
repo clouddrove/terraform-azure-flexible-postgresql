@@ -1,4 +1,3 @@
-## Vritual Network and Subnet Creation
 data "azurerm_client_config" "current" {}
 
 data "azuread_group" "main" {
@@ -40,6 +39,7 @@ module "labels" {
   managedby   = var.managedby
   label_order = var.label_order
   repository  = var.repository
+  extra_tags  = var.extra_tags
 }
 
 ##----------------------------------------------------------------------------- 

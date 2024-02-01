@@ -18,6 +18,12 @@ variable "repository" {
   description = "Terraform current module repo"
 }
 
+variable "extra_tags" {
+  type        = map(string)
+  default     = {}
+  description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
+}
+
 variable "label_order" {
   type        = list(any)
   default     = ["name", "environment"]
