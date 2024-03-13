@@ -232,6 +232,7 @@ This module has a few dependencies:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | active\_directory\_auth\_enabled | Set to true to enable Active Directory Authentication | `bool` | `true` | no |
+| ad\_admin\_objects\_id | azurerm postgresql flexible server active directory administrator's object id | `string` | `null` | no |
 | addon\_resource\_group\_name | The name of the addon vnet resource group | `string` | `""` | no |
 | addon\_vent\_link | The name of the addon vnet | `bool` | `false` | no |
 | addon\_virtual\_network\_id | The name of the addon vnet link vnet id | `string` | `""` | no |
