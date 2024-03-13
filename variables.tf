@@ -360,3 +360,9 @@ variable "server_configurations" {
   type        = map(string)
   default     = {}
 }
+
+variable "ad_admin_objects_id" {
+  type = string
+  default = null
+  description = "azurerm postgresql flexible server active directory administrator's object id"
+}

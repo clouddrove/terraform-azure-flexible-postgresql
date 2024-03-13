@@ -251,7 +251,7 @@ resource "azurerm_postgresql_flexible_server_active_directory_administrator" "ma
   server_name         = azurerm_postgresql_flexible_server.main[0].name
   resource_group_name = local.resource_group_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
-  object_id           = data.azuread_group.main[0].object_id
+  object_id           = var.ad_admin_objects_id == null ? data.azuread_group.main[0].object_id : var.ad_admin_objects_id
   principal_name      = var.principal_name
   principal_type      = var.principal_type
 }
