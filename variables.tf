@@ -44,8 +44,8 @@ variable "resource_group_name" {
 
 variable "enabled" {
   type        = bool
-  description = "Set to false to prevent the module from creating any resources."
   default     = true
+  description = "Set to false to prevent the module from creating any resources."
 }
 
 variable "existing_private_dns_zone" {
