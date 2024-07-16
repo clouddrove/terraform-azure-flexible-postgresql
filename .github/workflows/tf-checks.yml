@@ -6,21 +6,21 @@ on:
   workflow_dispatch:
 jobs:
   basic-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.5
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
     with:
       working_directory: './_examples/basic/'
 
   complete-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.5
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
     with:
       working_directory: './_examples/complete/'
 
   pgsql-public:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.5
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
     with:
       working_directory: './_examples/pgsql-public/'
   
   pgsql-server-replication:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.5
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
     with:
       working_directory: './_examples/pgsql-server-replication/'
