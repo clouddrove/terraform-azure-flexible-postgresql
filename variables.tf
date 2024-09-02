@@ -341,7 +341,7 @@ variable "admin_objects_ids" {
 
 variable "expiration_date" {
   type        = string
-  default     = "2024-05-22T18:29:59Z"
+  default     = "2034-05-22T18:29:59Z"
   description = "Expiration UTC datetime (Y-m-d'T'H:M:S'Z')"
 }
 
