@@ -27,7 +27,7 @@
 | existing\_private\_dns\_zone | Name of the existing private DNS zone | `bool` | `false` | no |
 | existing\_private\_dns\_zone\_id | n/a | `string` | `null` | no |
 | existing\_private\_dns\_zone\_name | The name of the Private DNS zone (without a terminating dot). Changing this forces a new resource to be created. | `string` | `""` | no |
-| expiration\_date | Expiration UTC datetime (Y-m-d'T'H:M:S'Z') | `string` | `"2024-05-22T18:29:59Z"` | no |
+| expiration\_date | Expiration UTC datetime (Y-m-d'T'H:M:S'Z') | `string` | `"2034-05-22T18:29:59Z"` | no |
 | extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
 | geo\_backup\_key\_vault\_key\_id | Key-vault key id to encrypt the geo redundant backup | `string` | `null` | no |
 | geo\_backup\_user\_assigned\_identity\_id | User assigned identity id to encrypt the geo redundant backup | `string` | `null` | no |
