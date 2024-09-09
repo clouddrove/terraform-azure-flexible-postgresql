@@ -1,6 +1,7 @@
 provider "azurerm" {
   features {}
   #Subscription ID is required to authenticate with Azure. 
+  #skip-provider-registration removed
   subscription_id = "01110-12010122022111111c"
 }
 
