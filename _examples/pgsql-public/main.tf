@@ -1,7 +1,7 @@
 provider "azurerm" {
   features {}
   #Subscription ID is required to authenticate with Azure.
-  subscription_id = "01110-12010122022111111c" 
+  subscription_id = "01110-12010122022111111c"
 }
 
 data "azurerm_client_config" "current_client_config" {}
