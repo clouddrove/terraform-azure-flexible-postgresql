@@ -42,8 +42,8 @@ module "labels" {
   extra_tags  = var.extra_tags
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create postgresql flexible server.    
+##-----------------------------------------------------------------------------
+## Below resource will create postgresql flexible server.
 ##-----------------------------------------------------------------------------
 resource "azurerm_postgresql_flexible_server" "main" {
   count                             = var.enabled ? 1 : 0
@@ -112,9 +112,9 @@ resource "azurerm_postgresql_flexible_server" "main" {
   depends_on = [azurerm_private_dns_zone_virtual_network_link.main, azurerm_private_dns_zone_virtual_network_link.main2]
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create user assigned identity in your azure environment. 
-## This user assigned identity will be created when pgsql with cmk is created.    
+##-----------------------------------------------------------------------------
+## Below resource will create user assigned identity in your azure environment.
+## This user assigned identity will be created when pgsql with cmk is created.
 ##-----------------------------------------------------------------------------
 resource "azurerm_user_assigned_identity" "identity" {
   count               = var.enabled && var.cmk_encryption_enabled ? 1 : 0
@@ -125,7 +125,7 @@ resource "azurerm_user_assigned_identity" "identity" {
 
 ##-----------------------------------------------------------------------------
 ## Below resource will provide user access on key vault based on role base access in azure environment.
-## if rbac is enabled then below resource will create. 
+## if rbac is enabled then below resource will create.
 ##-----------------------------------------------------------------------------
 resource "azurerm_role_assignment" "rbac_keyvault_crypto_officer" {
   for_each             = toset(var.enabled && var.cmk_encryption_enabled ? var.admin_objects_ids : [])
@@ -134,8 +134,8 @@ resource "azurerm_role_assignment" "rbac_keyvault_crypto_officer" {
   principal_id         = each.value
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will assign 'Key Vault Crypto Service Encryption User' role to user assigned identity created above. 
+##-----------------------------------------------------------------------------
+## Below resource will assign 'Key Vault Crypto Service Encryption User' role to user assigned identity created above.
 ##-----------------------------------------------------------------------------
 resource "azurerm_role_assignment" "identity_assigned" {
   depends_on           = [azurerm_user_assigned_identity.identity]
@@ -145,8 +145,8 @@ resource "azurerm_role_assignment" "identity_assigned" {
   role_definition_name = "Key Vault Crypto Service Encryption User"
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create key vault key that will be used for encryption.  
+##-----------------------------------------------------------------------------
+## Below resource will create key vault key that will be used for encryption.
 ##-----------------------------------------------------------------------------
 resource "azurerm_key_vault_key" "kvkey" {
   depends_on      = [azurerm_role_assignment.identity_assigned, azurerm_role_assignment.rbac_keyvault_crypto_officer]
@@ -177,7 +177,7 @@ resource "azurerm_key_vault_key" "kvkey" {
   }
 }
 
-##----------------------------------------------------------------------------- 
+##-----------------------------------------------------------------------------
 ## Below resource will create Firewall rules for Public server.
 ##-----------------------------------------------------------------------------
 resource "azurerm_postgresql_flexible_server_firewall_rule" "firewall_rules" {

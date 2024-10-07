@@ -13,6 +13,3 @@ output "azurerm_private_dns_zone_id" {
   value       = module.flexible-postgresql.azurerm_private_dns_zone_id
   description = "The Private DNS Zone ID."
 }
-
-
-
