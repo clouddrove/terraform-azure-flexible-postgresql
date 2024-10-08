@@ -372,9 +372,3 @@ variable "public_network_access_enabled" {
   default     = false
   description = "Enable public network access for the PostgreSQL Flexible Server"
 }
-
-variable "server_name" {
-  type        = string
-  default     = "testingserver123"
-  description = "Postgresql flexible server name"
-}

@@ -47,7 +47,7 @@ module "labels" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_postgresql_flexible_server" "main" {
   count                             = var.enabled ? 1 : 0
-  name                              = var.server_name
+  name                              = format("%s-pgsql-flexible-server", module.labels.id)
   resource_group_name               = local.resource_group_name
   location                          = local.location
   administrator_login               = var.admin_username
