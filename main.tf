@@ -47,7 +47,7 @@ module "labels" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_postgresql_flexible_server" "main" {
   count                             = var.enabled ? 1 : 0
-  name                              = format("%s-pgsql-flexible-server", module.labels.id)
+  name                              = var.server_name
   resource_group_name               = local.resource_group_name
   location                          = local.location
   administrator_login               = var.admin_username
@@ -59,6 +59,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
   create_mode                       = var.create_mode
   geo_redundant_backup_enabled      = var.geo_redundant_backup_enabled
   point_in_time_restore_time_in_utc = var.create_mode == "PointInTimeRestore" ? var.point_in_time_restore_time_in_utc : null
+  public_network_access_enabled     = var.public_network_access_enabled
   source_server_id                  = var.create_mode == "PointInTimeRestore" ? var.source_server_id : null
   storage_mb                        = var.storage_mb
   version                           = var.postgresql_version

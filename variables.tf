@@ -366,3 +366,15 @@ variable "ad_admin_objects_id" {
   default     = null
   description = "azurerm postgresql flexible server active directory administrator's object id"
 }
+
+variable "public_network_access_enabled" {
+  type        = bool
+  default     = false
+  description = "Enable public network access for the PostgreSQL Flexible Server"
+}
+
+variable "server_name" {
+  type        = string
+  default     = "testingserver123"
+  description = "Postgresql flexible server name"
+}
