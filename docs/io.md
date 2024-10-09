@@ -50,6 +50,7 @@
 | principal\_name | The name of Azure Active Directory principal. | `string` | `null` | no |
 | principal\_type | Set the principal type, defaults to ServicePrincipal. The type of Azure Active Directory principal. Possible values are Group, ServicePrincipal and User. Changing this forces a new resource to be created. | `string` | `"Group"` | no |
 | private\_dns | n/a | `bool` | `false` | no |
+| public\_network\_access\_enabled | Enable public network access for the PostgreSQL Flexible Server | `bool` | `false` | no |
 | registration\_enabled | Is auto-registration of virtual machine records in the virtual network in the Private DNS zone enabled | `bool` | `false` | no |
 | repository | Terraform current module repo | `string` | `""` | no |
 | resource\_group\_name | A container that holds related resources for an Azure solution | `string` | `""` | no |
