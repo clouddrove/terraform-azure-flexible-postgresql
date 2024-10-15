@@ -56,6 +56,7 @@
 | resource\_group\_name | A container that holds related resources for an Azure solution | `string` | `""` | no |
 | rotation\_policy | The rotation policy for azure key vault key | <pre>map(object({<br>    time_before_expiry   = string<br>    expire_after         = string<br>    notify_before_expiry = string<br>  }))</pre> | `null` | no |
 | server\_configurations | PostgreSQL server configurations to add. | `map(string)` | `{}` | no |
+| server\_custom\_name | User defined name for the PostgreSQL flexible server | `string` | `null` | no |
 | size | Size for PostgreSQL Flexible server sku : https://docs.microsoft.com/en-us/azure/postgresql/flexible-server/concepts-compute-storage. | `string` | `"D2ds_v4"` | no |
 | source\_server\_id | The resource ID of the source PostgreSQL Flexible Server to be restored. Required when create\_mode is PointInTimeRestore, GeoRestore, and Replica. Changing this forces a new PostgreSQL Flexible Server to be created. | `string` | `null` | no |
 | storage\_account\_id | Storage account id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
