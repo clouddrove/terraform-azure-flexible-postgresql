@@ -6,6 +6,12 @@ variable "name" {
   description = "Name  (e.g. `app` or `cluster`)."
 }
 
+variable "server_custom_name" {
+  description = "User defined name for the PostgreSQL flexible server"
+  type        = string
+  default     = null
+}
+
 variable "environment" {
   type        = string
   default     = ""
