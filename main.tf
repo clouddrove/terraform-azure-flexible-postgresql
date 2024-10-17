@@ -113,7 +113,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
   depends_on = [azurerm_private_dns_zone_virtual_network_link.main, azurerm_private_dns_zone_virtual_network_link.main2]
 
   lifecycle {
-    ignore_changes = [high_availability.0.standby_availability_zone]
+    ignore_changes = [high_availability[0].standby_availability_zone]
   }
 }
 
@@ -211,6 +211,7 @@ resource "azurerm_postgresql_flexible_server_configuration" "main" {
   name      = each.key
   server_id = azurerm_postgresql_flexible_server.main[0].id
   value     = each.value
+  depends_on = [ azurerm_postgresql_flexible_server.main ]
 }
 ##------------------------------------------------------------------------
 ## Private DNS for a PostgreSQL Server. - Default is "false"
