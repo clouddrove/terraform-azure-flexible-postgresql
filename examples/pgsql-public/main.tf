@@ -53,7 +53,7 @@ module "vault" {
     azurerm.dns_sub  = azurerm
   }
   source  = "clouddrove/key-vault/azure"
-  version = "1.2.0"
+  version = "1.3.1"
 
   name                        = "pgsqlvault98"
   environment                 = "test"
